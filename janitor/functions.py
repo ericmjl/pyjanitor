@@ -258,7 +258,6 @@ def clean_names(
     By default, column names are converted to string types.
     This can be switched off by passing in ``enforce_string=False``.
 
-    This method does not mutate the original DataFrame.
 
     Functional usage syntax:
 
@@ -439,8 +438,6 @@ def get_dupes(
     column_names: Optional[Union[str, Iterable[str], Hashable]] = None,
 ) -> pd.DataFrame:
     """Return all duplicate rows.
-
-    This method does not mutate the original DataFrame.
 
     Functional usage syntax:
 
@@ -808,8 +805,6 @@ def rename_column(
 ) -> pd.DataFrame:
     """Rename a column in place.
 
-    This method does not mutate the original DataFrame.
-
     Functional usage syntax:
 
     .. code-block:: python
@@ -879,8 +874,6 @@ def reorder_columns(
 
     Validates column_order to ensure columns are all present in DataFrame.
 
-    This method does not mutate the original DataFrame.
-
     Functional usage syntax:
 
     Given `DataFrame` with column names `col1`, `col2`, `col3`:
@@ -937,8 +930,6 @@ def coalesce(
     delete_columns: bool = True,
 ) -> pd.DataFrame:
     """Coalesce two or more columns of data in order of column names provided.
-
-    This method does not mutate the original DataFrame.
 
     Functional usage syntax:
 
@@ -1157,15 +1148,15 @@ def expand_column(
 
     Super sugary syntax that wraps :py:meth:`pandas.Series.str.get_dummies`.
 
-    This method does not mutate the original DataFrame.
-
     Functional usage syntax:
 
     .. code-block:: python
 
-        df = expand_column(df,
-                           column_name='col_name',
-                           sep=', ')  # note space in sep
+        df = expand_column(
+            df,
+            column_name='col_name',
+            sep=', '  # note space in sep
+        )
 
     Method chaining syntax:
 
@@ -1173,8 +1164,13 @@ def expand_column(
 
         import pandas as pd
         import janitor
-        df = pd.DataFrame(...).expand_column(column_name='col_name',
-                                             sep=', ')
+        df = (
+            pd.DataFrame(...)
+            .expand_column(
+                column_name='col_name',
+                sep=', '
+            )
+        )
 
     :param df: A pandas DataFrame.
     :param column_name: Which column to expand.
@@ -1300,7 +1296,6 @@ def deconcatenate_column(
     Numbering is always 1-indexed, not 0-indexed,
     in order to make the column names human-friendly.
 
-    This method does not mutate the original DataFrame.
 
     Functional usage syntax:
 
@@ -1406,7 +1401,6 @@ def filter_string(
     regex string to be passed into it, thus `search_string` can also be a regex
     pattern.
 
-    This method does not mutate the original DataFrame.
 
     This function allows us to method chain filtering operations:
 
@@ -1462,8 +1456,6 @@ def filter_on(
     df: pd.DataFrame, criteria: str, complement: bool = False
 ) -> pd.DataFrame:
     """Return a dataframe filtered on a particular criteria.
-
-    This method does not mutate the original DataFrame.
 
     This is super-sugary syntax that wraps the pandas `.query()` API, enabling
     users to use strings to quickly specify filters for filtering their
@@ -1532,8 +1524,6 @@ def filter_date(
     format: Optional[str] = None,  # skipcq: PYL-W0622
 ) -> pd.DataFrame:
     """Filter a date-based column based on certain criteria.
-
-    This method does not mutate the original DataFrame.
 
     Dates may be finicky and this function builds on top of the "magic" from
     the pandas `to_datetime` function that is able to parse dates well.
@@ -1741,8 +1731,6 @@ def filter_column_isin(
 ) -> pd.DataFrame:
     """Filter a dataframe for values in a column that exist in another iterable.
 
-    This method does not mutate the original DataFrame.
-
     Assumes exact matching; fuzzy matching not implemented.
 
     The below example syntax will filter the DataFrame such that we only get
@@ -1793,8 +1781,6 @@ def remove_columns(
     df: pd.DataFrame, column_names: Union[str, Iterable[str], Hashable]
 ) -> pd.DataFrame:
     """Remove the set of columns specified in `column_names`.
-
-    This method does not mutate the original DataFrame.
 
     Intended to be the method-chaining alternative to `del df[col]`.
 
@@ -1874,8 +1860,6 @@ def add_column(
     fill_remaining: bool = False,
 ) -> pd.DataFrame:
     """Add a column to the dataframe.
-
-    This method does not mutate the original DataFrame.
 
     Intended to be the method-chaining alternative to::
 
@@ -2048,8 +2032,6 @@ def add_columns(
     df: pd.DataFrame, fill_remaining: bool = False, **kwargs
 ) -> pd.DataFrame:
     """Add multiple columns to the dataframe.
-
-    This method does not mutate the original DataFrame.
 
     Method to augment `add_column` with ability to add multiple columns in
     one go. This replaces the need for multiple `add_column` calls.
@@ -2497,8 +2479,6 @@ def transform_column(
             elementwise=False
         )
 
-    This method does not mutate the original DataFrame.
-
     Let's say we wanted to apply a log10 transform a column of data.
 
     Originally one would write code like this:
@@ -2846,8 +2826,6 @@ def currency_column_to_numeric(
 ) -> pd.DataFrame:
     """Convert currency column to numeric.
 
-    This method does not mutate the original DataFrame.
-
     This method allows one to take a column containing currency values,
     inadvertently imported as a string, and cast it as a float. This is
     usually the case when reading CSV files that were modified in Excel.
@@ -3072,8 +3050,6 @@ def select_columns(
 
     It accepts a string, shell-like glob strings (*string*),
     regex, slice, array-like object, or a list of the previous options.
-
-    This method does not mutate the original DataFrame.
 
     Optional ability to invert selection of columns available as well.
 
@@ -3359,8 +3335,6 @@ def impute(
 def then(df: pd.DataFrame, func: Callable) -> pd.DataFrame:
     """Add an arbitrary function to run in the ``pyjanitor`` method chain.
 
-    This method does not mutate the original DataFrame.
-
     :param df: A pandas dataframe.
     :param func: A function you would like to run in the method chain.
         It should take one parameter and return one parameter, each being the
@@ -3414,8 +3388,6 @@ def also(df: pd.DataFrame, func: Callable, *args, **kwargs) -> pd.DataFrame:
 @deprecated_alias(column="column_name")
 def dropnotnull(df: pd.DataFrame, column_name: Hashable) -> pd.DataFrame:
     """Drop rows that do not have null values in the given column.
-
-    This method does not mutate the original DataFrame.
 
     Example usage:
 
@@ -3670,8 +3642,6 @@ def groupby_agg(
     """
     Shortcut for assigning a groupby-transform to a new column.
 
-    This method does not mutate the original DataFrame.
-
     Without this function, we would have to write a verbose line:
 
     .. code-block:: python
@@ -3893,8 +3863,6 @@ def drop_duplicate_columns(
 ) -> pd.DataFrame:
     """Remove a duplicated column specified by column_name, its index.
 
-    This method does not mutate the original DataFrame.
-
     Column order 0 is to remove the first column,
            order 1 is to remove the second column, and etc
 
@@ -3950,8 +3918,6 @@ def take_first(
 ) -> pd.DataFrame:
     """Take the first row within each group specified by `subset`.
 
-    This method does not mutate the original DataFrame.
-
     .. code-block:: python
 
         import pandas as pd
@@ -3984,8 +3950,6 @@ def shuffle(
 ) -> pd.DataFrame:
     """Shuffle the rows of the DataFrame.
 
-    This method does not mutate the original DataFrame.
-
     Super-sugary syntax! Underneath the hood, we use ``df.sample(frac=1)``,
     with the option to set the random state.
 
@@ -4011,8 +3975,6 @@ def join_apply(
     df: pd.DataFrame, func: Callable, new_column_name: str
 ) -> pd.DataFrame:
     """Join the result of applying a function across dataframe rows.
-
-    This method does not mutate the original DataFrame.
 
     This is a convenience function that allows us to apply arbitrary functions
     that take any combination of information from any of the columns. The only
